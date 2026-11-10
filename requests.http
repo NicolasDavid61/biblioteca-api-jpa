@@ -1,0 +1,84 @@
+### Arquivo para a extensão "REST Client" do VS Code (clique em "Send Request" acima de cada bloco)
+### Com a aplicação rodando em http://localhost:8080
+
+@baseUrl = http://localhost:8080/api/livros
+
+### 1) Cadastrar livro (esperado: 201 Created)
+POST {{baseUrl}}
+Content-Type: application/json
+
+{
+  "titulo": "Dom Casmurro",
+  "autor": "Machado de Assis",
+  "isbn": "9788535910663",
+  "anoPublicacao": 1899
+}
+
+### 2) Cadastrar outro livro (esperado: 201 Created)
+POST {{baseUrl}}
+Content-Type: application/json
+
+{
+  "titulo": "O Cortiço",
+  "autor": "Aluísio Azevedo",
+  "isbn": "9788508040452",
+  "anoPublicacao": 1890
+}
+
+### 3) Listar todos (esperado: 200 OK)
+GET {{baseUrl}}
+
+### 4) Filtrar por título (esperado: 200 OK)
+GET {{baseUrl}}?titulo=casmurro
+
+### 5) Buscar por ID (esperado: 200 OK)
+GET {{baseUrl}}/1
+
+### 6) Atualizar completamente (esperado: 200 OK)
+PUT {{baseUrl}}/1
+Content-Type: application/json
+
+{
+  "titulo": "Dom Casmurro (edição revisada)",
+  "autor": "Machado de Assis",
+  "isbn": "9788535910663",
+  "anoPublicacao": 1899
+}
+
+### 7) Atualizar parcialmente (esperado: 200 OK)
+PATCH {{baseUrl}}/1
+Content-Type: application/json
+
+{
+  "anoPublicacao": 1900
+}
+
+### 8) Remover (esperado: 204 No Content)
+DELETE {{baseUrl}}/2
+
+### ---------- Casos de erro ----------
+
+### 9) Validação: campos inválidos (esperado: 400 Bad Request)
+POST {{baseUrl}}
+Content-Type: application/json
+
+{
+  "titulo": "",
+  "autor": "Alguém",
+  "isbn": "123",
+  "anoPublicacao": 5
+}
+
+### 10) ID inexistente (esperado: 404 Not Found)
+GET {{baseUrl}}/999
+
+### 11) ISBN repetido (esperado: 409 Conflict) - rode o item 1 antes
+POST {{baseUrl}}
+Content-Type: application/json
+
+{
+  "titulo": "Outro livro",
+  "autor": "Outro autor",
+  "isbn": "9788535910663",
+  "anoPublicacao": 2020
+}
